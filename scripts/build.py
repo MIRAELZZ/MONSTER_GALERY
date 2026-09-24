@@ -8,6 +8,7 @@
 Usage:  python scripts/build.py            (needs: pip install pillow)
 """
 import json
+import re
 import shutil
 import sys
 from datetime import datetime, timezone
@@ -31,6 +32,9 @@ THUMB_QUALITY = 78
 
 
 def pretty_name(stem: str) -> str:
+    """'AbominationElin_skel' -> 'Abomination Elin' (the exact filename is shown separately)."""
+    stem = re.sub(r"[_\-. ]skel$", "", stem, flags=re.I)
+    stem = re.sub(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", " ", stem)
     return " ".join(stem.replace("_", " ").replace("-", " ").split())
 
 
