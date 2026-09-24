@@ -22,6 +22,12 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install pillow
+      # Reuse thumbnails from earlier builds; only new/changed images are processed.
+      - uses: actions/cache@v4
+        with:
+          path: .thumbcache
+          key: thumbs-${{ hashFiles('Monster_Detail/**', 'Monster_Detail1/**') }}
+          restore-keys: thumbs-
       - run: python scripts/build.py
       - uses: actions/upload-pages-artifact@v3
         with:
