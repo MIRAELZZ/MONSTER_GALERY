@@ -1,0 +1,45 @@
+name: Import images from Google Drive
+
+on:
+  workflow_dispatch:
+    inputs:
+      plan_a_folder:
+        description: "Google Drive folder ID for Plan A (Monster_Detail)"
+        default: "1FDYGY695ufUr-iDahl6UyeH4TwDCuH9j"
+      plan_b_folder:
+        description: "Google Drive folder ID for Plan B (Monster_Detail1)"
+        default: "1ff802MXEqR0g8x3b1Ii-deR_Xkl6iBB3"
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download images
+        run: >
+          python scripts/import_drive.py
+          "${{ inputs.plan_a_folder }}:Monster_Detail"
+          "${{ inputs.plan_b_folder }}:Monster_Detail1"
+      - name: Commit images
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898+github-actions[bot]@users.noreply.github.com"
+          git add Monster_Detail Monster_Detail1
+          if git diff --cached --quiet; then
+            echo "Tidak ada gambar baru."
+          else
+            git commit -m "Import monster images from Google Drive"
+            git push
+          fi
+      # Pushes made with GITHUB_TOKEN don't trigger other workflows, so start the deploy explicitly.
+      - name: Deploy gallery
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref "${{ github.ref_name }}"
