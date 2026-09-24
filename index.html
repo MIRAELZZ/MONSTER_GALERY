@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Monster Gallery</title>
+  <meta name="description" content="Galeri monster — Plan A & Plan B">
+  <meta name="theme-color" content="#0b0a12">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👾</text></svg>">
+  <link rel="preload" href="manifest.json" as="fetch" crossorigin>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <header class="hero">
+    <p class="eyebrow">Koleksi</p>
+    <h1><span>MONSTER</span> GALLERY</h1>
+    <p class="sub" id="stats">Memuat koleksi…</p>
+  </header>
+
+  <nav class="toolbar" aria-label="Filter galeri">
+    <div class="tabs" role="tablist" id="tabs">
+      <button role="tab" class="tab active" data-plan="all" aria-selected="true">Semua <b data-count="all">0</b></button>
+      <button role="tab" class="tab" data-plan="A" aria-selected="false">Plan A <b data-count="A">0</b></button>
+      <button role="tab" class="tab" data-plan="B" aria-selected="false">Plan B <b data-count="B">0</b></button>
+    </div>
+    <div class="controls">
+      <label class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+        <input id="search" type="search" placeholder="Cari nama monster…" autocomplete="off">
+      </label>
+      <select id="sort" aria-label="Urutkan">
+        <option value="az">A → Z</option>
+        <option value="za">Z → A</option>
+      </select>
+    </div>
+  </nav>
+
+  <main>
+    <section class="grid" id="grid" aria-live="polite"></section>
+    <p class="empty" id="empty" hidden>Tidak ada monster yang cocok.</p>
+  </main>
+
+  <footer class="foot">Monster Gallery · Plan A = <code>Monster_Detail</code> · Plan B = <code>Monster_Detail1</code></footer>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Detail monster">
+    <button class="lb-close" data-act="close" aria-label="Tutup">✕</button>
+    <button class="lb-nav prev" data-act="prev" aria-label="Sebelumnya">‹</button>
+    <figure>
+      <div class="lb-stage"><img id="lb-img" alt=""></div>
+      <figcaption>
+        <span class="badge" id="lb-badge"></span>
+        <h2 id="lb-name"></h2>
+        <p class="file" id="lb-file"></p>
+        <p class="lb-meta"><span id="lb-pos"></span> · <a id="lb-open" target="_blank" rel="noopener">Buka ukuran asli ↗</a></p>
+      </figcaption>
+    </figure>
+    <button class="lb-nav next" data-act="next" aria-label="Berikutnya">›</button>
+  </dialog>
+
+  <script src="assets/app.js" defer></script>
+</body>
+</html>
