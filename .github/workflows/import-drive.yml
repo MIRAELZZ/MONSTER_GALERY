@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       plan_a_folder:
-        description: "Google Drive folder ID for Plan A (Monster_Detail)"
+        description: "Google Drive folder ID for Plan A (Monster_Detail) — kosongkan untuk lewati"
         default: "1FDYGY695ufUr-iDahl6UyeH4TwDCuH9j"
       plan_b_folder:
-        description: "Google Drive folder ID for Plan B (Monster_Detail1)"
+        description: "Google Drive folder ID for Plan B (Monster_Detail1) — kosongkan untuk lewati"
         default: "1ff802MXEqR0g8x3b1Ii-deR_Xkl6iBB3"
       plan_c_folder:
         description: "Google Drive folder ID for Plan C (Monster_Detail2) — kosongkan jika tidak ada"
@@ -28,15 +28,15 @@ jobs:
       - name: Download images
         run: >
           python scripts/import_drive.py
-          "${{ inputs.plan_a_folder }}:Monster_Detail"
-          "${{ inputs.plan_b_folder }}:Monster_Detail1"
+          ${{ inputs.plan_a_folder && format('"{0}:Monster_Detail"', inputs.plan_a_folder) || '' }}
+          ${{ inputs.plan_b_folder && format('"{0}:Monster_Detail1"', inputs.plan_b_folder) || '' }}
           ${{ inputs.plan_c_folder && format('"{0}:Monster_Detail2"', inputs.plan_c_folder) || '' }}
       - name: Commit images
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898+github-actions[bot]@users.noreply.github.com"
           mkdir -p Monster_Detail2
-          git add Monster_Detail Monster_Detail1 Monster_Detail2
+          git add -A Monster_Detail Monster_Detail1 Monster_Detail2
           if git diff --cached --quiet; then
             echo "Tidak ada gambar baru."
           else
