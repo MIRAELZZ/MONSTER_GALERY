@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Monster Gallery</title>
-  <meta name="description" content="Galeri monster — Plan A, B & C">
+  <meta name="description" content="Galeri monster — Plan A–F">
   <meta name="theme-color" content="#0b0a12">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👾</text></svg>">
   <link rel="preload" href="manifest.json" as="fetch" crossorigin>
@@ -22,9 +22,6 @@
   <nav class="toolbar" aria-label="Filter galeri">
     <div class="tabs" role="tablist" id="tabs">
       <button role="tab" class="tab active" data-plan="all" aria-selected="true">Semua <b data-count="all">0</b></button>
-      <button role="tab" class="tab" data-plan="A" aria-selected="false">Plan A <b data-count="A">0</b></button>
-      <button role="tab" class="tab" data-plan="B" aria-selected="false">Plan B <b data-count="B">0</b></button>
-      <button role="tab" class="tab" data-plan="C" aria-selected="false">Plan C <b data-count="C">0</b></button>
     </div>
     <div class="controls">
       <label class="search">
@@ -43,7 +40,7 @@
     <p class="empty" id="empty" hidden>Tidak ada monster yang cocok.</p>
   </main>
 
-  <footer class="foot">Monster Gallery · Plan A = <code>Monster_Detail</code> · Plan B = <code>Monster_Detail1</code> · Plan C = <code>Monster_Detail2</code></footer>
+  <footer class="foot" id="foot">Monster Gallery</footer>
 
   <dialog class="lightbox" id="lightbox" aria-label="Detail monster">
     <button class="lb-close" data-act="close" aria-label="Tutup">✕</button>

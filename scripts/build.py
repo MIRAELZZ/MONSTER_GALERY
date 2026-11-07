@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Build the static Monster Gallery site into ./_site.
 
-- Scans Monster_Detail (Plan A) and Monster_Detail1 (Plan B) and
-  Monster_Detail2 (Plan C) for images.
+- Scans the plan folders listed in PLANS (Monster_Detail = Plan A,
+  Monster_Detail1 = Plan B, ...) for images, including subfolders.
 - Copies the originals, generates small WebP thumbnails for fast loading.
 - Writes manifest.json that the page reads.
 
@@ -34,6 +34,9 @@ PLANS = [
     {"id": "A", "label": "Plan A", "folder": "Monster_Detail"},
     {"id": "B", "label": "Plan B", "folder": "Monster_Detail1"},
     {"id": "C", "label": "Plan C", "folder": "Monster_Detail2"},
+    {"id": "D", "label": "Plan D", "folder": "Monster_Detail3"},
+    {"id": "E", "label": "Plan E", "folder": "Monster_Detail4"},
+    {"id": "F", "label": "Plan F", "folder": "Monster_Detail5"},
 ]
 IMAGE_EXT = {".png", ".jpg", ".jpeg", ".webp", ".gif"}
 THUMB_WIDTH = 480
