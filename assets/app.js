@@ -24,7 +24,7 @@
       document.querySelector('[data-count="all"]').textContent = all.length;
       $("#stats").textContent = all.length
         ? `${all.length} monster · ${data.plans.map((p) => `${p.label}: ${p.items.length}`).join(" · ")}`
-        : "Belum ada gambar. Upload PNG ke folder Monster_Detail / Monster_Detail1.";
+        : "Belum ada gambar. Upload PNG ke folder Monster_Detail / Monster_Detail1 / Monster_Detail2.";
       readHash();
       render();
     })
@@ -80,7 +80,7 @@
     });
   }
   function readHash() {
-    const m = location.hash.match(/^#plan-([AB])$/i);
+    const m = location.hash.match(/^#plan-([ABC])$/i);
     if (m) setPlan(m[1].toUpperCase());
   }
   let debounce;
@@ -97,7 +97,7 @@
     if (!view.length) return;
     current = (i + view.length) % view.length;
     const m = view[current];
-    lb.style.setProperty("--glow", m.plan === "A" ? "var(--a)" : "var(--b)");
+    lb.style.setProperty("--glow", `var(--${m.plan.toLowerCase()})`);
     lbImg.src = url(m.thumb);          // show the light thumb instantly…
     const full = new Image();          // …then swap in the original when ready
     full.onload = () => { if (view[current] === m) lbImg.src = full.src; };
