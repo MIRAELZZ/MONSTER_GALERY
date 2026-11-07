@@ -1,24 +1,25 @@
 # 👾 Monster Gallery
 
-Web galeri monster: **Plan A** dan **Plan B**, di-host gratis lewat GitHub Pages.
+Web galeri monster: **Plan A**, **Plan B** dan **Plan C**, di-host gratis lewat GitHub Pages.
 
 | Plan   | Folder di repo      | Asal folder di PC     |
 |--------|---------------------|-----------------------|
 | Plan A | `Monster_Detail/`   | `D:\Monster_Detail`   |
 | Plan B | `Monster_Detail1/`  | `D:\Monster_Detail1`  |
+| Plan C | `Monster_Detail2/`  | `F:\ClaudeTask\NEWPROJECT_TOOLSFULL\RFONLINE_TOOLKIT\Tools\RFModelConverter\dist\ImageRender\AION\monster` |
 
 Nama monster diambil dari **nama file PNG**, dan nama file aslinya juga ikut tampil
 (`Fire_Dragon.png` → tampil sebagai **Fire Dragon** + `Fire_Dragon.png`).
 
 ## Fitur
-- Tab Semua / Plan A / Plan B + jumlah gambar
+- Tab Semua / Plan A / Plan B / Plan C + jumlah gambar
 - Cari nama monster & urutkan A→Z / Z→A
 - Klik gambar untuk tampilan besar (panah ← →, geser di HP, Esc untuk tutup)
 - **Ringan**: thumbnail WebP kecil dibuat otomatis, gambar di-*lazy load*,
   ukuran asli baru dimuat saat dibuka
 
 ## Cara menambah gambar
-Salin semua PNG ke folder `Monster_Detail/` (Plan A) dan `Monster_Detail1/` (Plan B), lalu push.
+Salin semua PNG ke folder `Monster_Detail/` (Plan A), `Monster_Detail1/` (Plan B) dan `Monster_Detail2/` (Plan C), lalu push.
 Setiap push, GitHub Actions otomatis membuat thumbnail dan memperbarui website.
 Tidak perlu mengedit kode apa pun.
 

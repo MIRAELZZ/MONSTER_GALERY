@@ -26,7 +26,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: .thumbcache
-          key: thumbs-${{ hashFiles('Monster_Detail/**', 'Monster_Detail1/**') }}
+          key: thumbs-${{ hashFiles('Monster_Detail/**', 'Monster_Detail1/**', 'Monster_Detail2/**') }}
           restore-keys: thumbs-
       - run: python scripts/build.py
       - uses: actions/upload-pages-artifact@v3
