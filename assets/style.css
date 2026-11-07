@@ -128,7 +128,7 @@ main { padding-top: 16px; padding-bottom: 56px; }
 .card {
   position: relative; display: flex; flex-direction: column; min-width: 0;
   padding: 0; border: 0; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
-  border-radius: 0; background: var(--bg); text-align: left; cursor: pointer;
+  border-radius: 0; background: transparent; text-align: left; cursor: pointer;
   content-visibility: auto; contain-intrinsic-size: 200px 270px;
 }
 .card::after {
