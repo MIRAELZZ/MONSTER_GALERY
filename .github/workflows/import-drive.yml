@@ -10,7 +10,16 @@ on:
         description: "Google Drive folder ID for Plan B (Monster_Detail1) — kosongkan untuk lewati"
         default: "1ff802MXEqR0g8x3b1Ii-deR_Xkl6iBB3"
       plan_c_folder:
-        description: "Google Drive folder ID for Plan C (Monster_Detail2) — kosongkan jika tidak ada"
+        description: "Google Drive folder ID for Plan C (Monster_Detail2) — kosongkan untuk lewati"
+        default: ""
+      plan_d_folder:
+        description: "Google Drive folder ID for Plan D (Monster_Detail3) — boleh beberapa, pisahkan koma"
+        default: ""
+      plan_e_folder:
+        description: "Google Drive folder ID for Plan E (Monster_Detail4) — boleh beberapa, pisahkan koma"
+        default: ""
+      plan_f_folder:
+        description: "Google Drive folder ID for Plan F (Monster_Detail5) — boleh beberapa, pisahkan koma"
         default: ""
 
 permissions:
@@ -31,12 +40,14 @@ jobs:
           ${{ inputs.plan_a_folder && format('"{0}:Monster_Detail"', inputs.plan_a_folder) || '' }}
           ${{ inputs.plan_b_folder && format('"{0}:Monster_Detail1"', inputs.plan_b_folder) || '' }}
           ${{ inputs.plan_c_folder && format('"{0}:Monster_Detail2"', inputs.plan_c_folder) || '' }}
+          ${{ inputs.plan_d_folder && format('"{0}:Monster_Detail3"', inputs.plan_d_folder) || '' }}
+          ${{ inputs.plan_e_folder && format('"{0}:Monster_Detail4"', inputs.plan_e_folder) || '' }}
+          ${{ inputs.plan_f_folder && format('"{0}:Monster_Detail5"', inputs.plan_f_folder) || '' }}
       - name: Commit images
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898+github-actions[bot]@users.noreply.github.com"
-          mkdir -p Monster_Detail2
-          git add -A Monster_Detail Monster_Detail1 Monster_Detail2
+          git add -A Monster_Detail*
           if git diff --cached --quiet; then
             echo "Tidak ada gambar baru."
           else

@@ -12,6 +12,7 @@
   let plan = "all";
   let current = -1;    // index in `view` shown in the lightbox
 
+  const color = (id) => `var(--${id.toLowerCase()}, var(--accent))`;
   const url = (p) => p.split("/").map(encodeURIComponent).join("/");
 
   fetch("manifest.json", { cache: "no-cache" })
@@ -19,12 +20,22 @@
     .then((data) => {
       for (const p of data.plans) {
         for (const it of p.items) all.push({ ...it, plan: p.id, label: p.label, folder: p.folder });
-        document.querySelector(`[data-count="${p.id}"]`).textContent = p.items.length;
+        const tab = document.createElement("button");
+        tab.className = "tab";
+        tab.setAttribute("role", "tab");
+        tab.setAttribute("aria-selected", "false");
+        tab.dataset.plan = p.id;
+        tab.style.setProperty("--pc", color(p.id));
+        tab.innerHTML = `<span></span> <b>${p.items.length}</b>`;
+        tab.firstChild.textContent = p.label;
+        $("#tabs").appendChild(tab);
       }
       document.querySelector('[data-count="all"]').textContent = all.length;
       $("#stats").textContent = all.length
         ? `${all.length} monster · ${data.plans.map((p) => `${p.label}: ${p.items.length}`).join(" · ")}`
-        : "Belum ada gambar. Upload PNG ke folder Monster_Detail / Monster_Detail1 / Monster_Detail2.";
+        : "Belum ada gambar. Upload PNG ke folder Monster_Detail….";
+      $("#foot").textContent = "Monster Gallery · " +
+        data.plans.map((p) => `${p.label} = ${p.folder}`).join(" · ");
       readHash();
       render();
     })
@@ -43,6 +54,7 @@
       const card = document.createElement("button");
       card.className = "card";
       card.dataset.plan = m.plan;
+      card.style.setProperty("--pc", color(m.plan));
       card.dataset.i = i;
       card.style.animationDelay = `${Math.min(i, 24) * 25}ms`;
       card.innerHTML = `
@@ -80,8 +92,8 @@
     });
   }
   function readHash() {
-    const m = location.hash.match(/^#plan-([ABC])$/i);
-    if (m) setPlan(m[1].toUpperCase());
+    const m = location.hash.match(/^#plan-(\w+)$/i);
+    if (m && all.some((x) => x.plan === m[1].toUpperCase())) setPlan(m[1].toUpperCase());
   }
   let debounce;
   search.addEventListener("input", () => { clearTimeout(debounce); debounce = setTimeout(render, 120); });
@@ -97,7 +109,7 @@
     if (!view.length) return;
     current = (i + view.length) % view.length;
     const m = view[current];
-    lb.style.setProperty("--glow", `var(--${m.plan.toLowerCase()})`);
+    lb.style.setProperty("--glow", color(m.plan));
     lbImg.src = url(m.thumb);          // show the light thumb instantly…
     const full = new Image();          // …then swap in the original when ready
     full.onload = () => { if (view[current] === m) lbImg.src = full.src; };
@@ -106,7 +118,7 @@
     $("#lb-name").textContent = m.name;
     $("#lb-file").textContent = `${m.folder}/${m.path}`;
     $("#lb-badge").textContent = m.label;
-    $("#lb-badge").style.background = `var(--${m.plan.toLowerCase()})`;
+    $("#lb-badge").style.background = color(m.plan);
     $("#lb-pos").textContent = `${current + 1} / ${view.length}`;
     $("#lb-open").href = url(m.src);
     if (!lb.open) lb.showModal();

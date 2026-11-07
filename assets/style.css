@@ -8,6 +8,9 @@
   --a: #ff4d6d;   /* Plan A */
   --b: #3ddbd9;   /* Plan B */
   --c: #ffc94d;   /* Plan C */
+  --d: #7cff6b;   /* Plan D */
+  --e: #ff8f3d;   /* Plan E */
+  --f: #6b8cff;   /* Plan F */
   --accent: #b388ff;
   --radius: 16px;
 }
@@ -42,7 +45,7 @@ body {
   font-weight: 900; letter-spacing: .04em;
 }
 .hero h1 span {
-  background: linear-gradient(90deg, var(--a), var(--accent), var(--b), var(--c));
+  background: linear-gradient(90deg, var(--a), var(--accent), var(--b), var(--c), var(--d), var(--e), var(--f));
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
 .sub { color: var(--muted); margin: 14px 0 0; }
@@ -56,7 +59,7 @@ body {
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line);
 }
-.tabs { display: flex; gap: 6px; padding: 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; }
+.tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 18px; }
 .tab {
   border: 0; cursor: pointer; border-radius: 999px; padding: 8px 16px;
   background: transparent; color: var(--muted); font: inherit; font-weight: 600;
@@ -65,9 +68,7 @@ body {
 .tab b { font-weight: 700; font-size: 12px; margin-left: 4px; opacity: .7; }
 .tab:hover { color: var(--text); }
 .tab.active { background: var(--panel-2); color: var(--text); box-shadow: inset 0 0 0 1px var(--line); }
-.tab.active[data-plan="A"] { color: var(--a); }
-.tab.active[data-plan="B"] { color: var(--b); }
-.tab.active[data-plan="C"] { color: var(--c); }
+.tab.active[data-plan]:not([data-plan="all"]) { color: var(--pc); }
 
 .controls { display: flex; gap: 8px; flex: 1 1 280px; justify-content: flex-end; }
 .search {
@@ -102,9 +103,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 24px 16px 48px; }
   box-shadow: 0 14px 40px -12px var(--glow);
   outline: none;
 }
-.card[data-plan="A"] { --glow: var(--a); }
-.card[data-plan="B"] { --glow: var(--b); }
-.card[data-plan="C"] { --glow: var(--c); }
+.card { --glow: var(--pc); }
 
 .thumb {
   aspect-ratio: 1 / 1; display: grid; place-items: center; overflow: hidden;
