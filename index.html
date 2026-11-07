@@ -4,57 +4,82 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Monster Gallery</title>
-  <meta name="description" content="Galeri monster — Plan A–F">
-  <meta name="theme-color" content="#0b0a12">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👾</text></svg>">
+  <meta name="description" content="Katalog render monster — Plan A–F">
+  <meta name="theme-color" content="#0f0f0e">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%230f0f0e'/><rect x='4' y='4' width='8' height='8' fill='%23d6643f'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
   <link rel="preload" href="manifest.json" as="fetch" crossorigin>
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-  <div class="bg-glow" aria-hidden="true"></div>
-
-  <header class="hero">
-    <p class="eyebrow">Koleksi</p>
-    <h1><span>MONSTER</span> GALLERY</h1>
-    <p class="sub" id="stats">Memuat koleksi…</p>
+  <header class="masthead">
+    <div class="wrap masthead-row">
+      <h1>Monster Gallery</h1>
+      <dl class="tally" id="tally">
+        <div><dt>Entri</dt><dd id="total">—</dd></div>
+        <div><dt>Plan</dt><dd id="plan-count">—</dd></div>
+      </dl>
+    </div>
   </header>
 
   <nav class="toolbar" aria-label="Filter galeri">
-    <div class="tabs" role="tablist" id="tabs">
-      <button role="tab" class="tab active" data-plan="all" aria-selected="true">Semua <b data-count="all">0</b></button>
-    </div>
-    <div class="controls">
-      <label class="search">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-        <input id="search" type="search" placeholder="Cari nama monster…" autocomplete="off">
-      </label>
-      <select id="sort" aria-label="Urutkan">
-        <option value="az">A → Z</option>
-        <option value="za">Z → A</option>
-      </select>
+    <div class="wrap toolbar-row">
+      <div class="tabs" role="tablist" id="tabs">
+        <button role="tab" class="tab active" data-plan="all" aria-selected="true"><span>Semua</span><b data-count="all">0</b></button>
+      </div>
+      <div class="controls">
+        <label class="search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+          <input id="search" type="search" placeholder="Cari nama atau file" autocomplete="off" spellcheck="false">
+          <kbd>/</kbd>
+        </label>
+        <select id="sort" aria-label="Urutkan">
+          <option value="az">A–Z</option>
+          <option value="za">Z–A</option>
+        </select>
+      </div>
     </div>
   </nav>
 
-  <main>
+  <main class="wrap">
+    <p class="status" id="status">Memuat katalog…</p>
     <section class="grid" id="grid" aria-live="polite"></section>
-    <p class="empty" id="empty" hidden>Tidak ada monster yang cocok.</p>
+    <p class="empty" id="empty" hidden>Tidak ada entri yang cocok.</p>
   </main>
 
-  <footer class="foot" id="foot">Monster Gallery</footer>
+  <footer class="wrap foot" id="foot"></footer>
 
   <dialog class="lightbox" id="lightbox" aria-label="Detail monster">
-    <button class="lb-close" data-act="close" aria-label="Tutup">✕</button>
-    <button class="lb-nav prev" data-act="prev" aria-label="Sebelumnya">‹</button>
-    <figure>
-      <div class="lb-stage"><img id="lb-img" alt=""></div>
-      <figcaption>
-        <span class="badge" id="lb-badge"></span>
-        <h2 id="lb-name"></h2>
-        <p class="file" id="lb-file"></p>
-        <p class="lb-meta"><span id="lb-pos"></span> · <a id="lb-open" target="_blank" rel="noopener">Buka ukuran asli ↗</a></p>
-      </figcaption>
-    </figure>
-    <button class="lb-nav next" data-act="next" aria-label="Berikutnya">›</button>
+    <div class="lb-stage" data-act="close">
+      <img id="lb-img" alt="">
+    </div>
+    <aside class="lb-panel">
+      <div class="lb-top">
+        <span class="lb-pos" id="lb-pos"></span>
+        <button class="icon-btn" data-act="close" aria-label="Tutup">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <p class="lb-plan" id="lb-plan"></p>
+      <h2 id="lb-name"></h2>
+      <dl class="lb-meta">
+        <div><dt>File</dt><dd id="lb-file"></dd></div>
+        <div><dt>Folder</dt><dd id="lb-folder"></dd></div>
+        <div><dt>Ukuran</dt><dd id="lb-size"></dd></div>
+      </dl>
+      <a class="lb-open" id="lb-open" target="_blank" rel="noopener">Buka ukuran asli</a>
+      <div class="lb-nav">
+        <button class="icon-btn" data-act="prev" aria-label="Sebelumnya">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <button class="icon-btn" data-act="next" aria-label="Berikutnya">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <p class="lb-hint">← → untuk pindah · Esc untuk tutup</p>
+    </aside>
   </dialog>
 
   <script src="assets/app.js" defer></script>
