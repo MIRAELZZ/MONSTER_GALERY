@@ -28,7 +28,11 @@ jobs:
           path: .thumbcache
           key: thumbs-${{ hashFiles('Monster_Detail*/**') }}
           restore-keys: thumbs-
+      # Full-size images are served straight from this commit on GitHub, so the
+      # Pages upload holds only the thumbnails (the 1 GB Pages limit stays far off).
       - run: python scripts/build.py
+        env:
+          ORIGINALS_BASE: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
