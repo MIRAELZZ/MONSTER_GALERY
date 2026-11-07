@@ -9,6 +9,11 @@
 Thumbnails are cached in ./.thumbcache by file content hash, so rebuilds only
 process new or changed images.
 
+Originals: by default they are copied into ./_site. If ORIGINALS_BASE is set
+(e.g. https://raw.githubusercontent.com/OWNER/REPO/COMMIT/), they are not
+copied and the page loads them from that URL instead. This keeps the Pages
+upload small (thumbnails only), well under the 1 GB site limit.
+
 Usage:  python scripts/build.py            (needs: pip install pillow)
 """
 import hashlib
@@ -20,6 +25,7 @@ import sys
 from concurrent.futures import ProcessPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import quote
 
 try:
     from PIL import Image
@@ -82,7 +88,10 @@ def main() -> None:
     shutil.copytree(ROOT / "assets", OUT / "assets")
     (OUT / ".nojekyll").touch()
 
-    manifest = {"generated": datetime.now(timezone.utc).isoformat(), "plans": []}
+    base = os.environ.get("ORIGINALS_BASE", "").strip()
+    if base and not base.endswith("/"):
+        base += "/"
+    manifest = {"generated": datetime.now(timezone.utc).isoformat(), "originals": base, "plans": []}
     total = 0
 
     with ProcessPoolExecutor(max_workers=os.cpu_count()) as pool:
@@ -96,17 +105,18 @@ def main() -> None:
             items = []
             for path, (cached, w, h) in zip(files, pool.map(make_thumb, files, chunksize=8)):
                 rel = path.relative_to(folder).as_posix()
-                dest = OUT / plan["folder"] / rel
-                dest.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(path, dest)
+                if not base:
+                    dest = OUT / plan["folder"] / rel
+                    dest.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(path, dest)
 
                 if cached:
                     thumb_rel = Path("thumbs") / plan["folder"] / Path(rel).with_suffix(".webp")
                     (OUT / thumb_rel).parent.mkdir(parents=True, exist_ok=True)
                     shutil.copy2(cached, OUT / thumb_rel)
                     thumb = thumb_rel.as_posix()
-                else:
-                    thumb = f"{plan['folder']}/{rel}"
+                else:  # no thumbnail: show the original in the grid
+                    thumb = f"{base}{quote(plan['folder'])}/{quote(rel)}" if base else f"{plan['folder']}/{rel}"
 
                 items.append({
                     "name": pretty_name(path.stem),
@@ -125,7 +135,7 @@ def main() -> None:
     (OUT / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
     )
-    print(f"Selesai: {total} gambar -> {OUT}")
+    print(f"Selesai: {total} gambar -> {OUT}" + (f" (gambar asli dari {base})" if base else ""))
 
 
 if __name__ == "__main__":

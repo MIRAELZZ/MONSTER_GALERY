@@ -15,7 +15,9 @@
   let current = -1;    // index in `view` shown in the lightbox
 
   const color = (id) => `var(--${id.toLowerCase()}, var(--accent))`;
-  const url = (p) => p.split("/").map(encodeURIComponent).join("/");
+  const url = (p) => /^https?:/.test(p) ? p : p.split("/").map(encodeURIComponent).join("/");
+  let originals = "";  // base URL for full-size images ("" = same site)
+  const full = (m) => originals + url(m.src);
   const num = (n) => n.toLocaleString("id-ID");
   const pad = (n, w) => String(n).padStart(w, "0");
   const el = (tag, cls, text) => {
@@ -29,6 +31,7 @@
     .then((r) => r.json())
     .then((data) => {
       plans = data.plans;
+      originals = data.originals || "";
       const foot = $("#foot");
       for (const p of plans) {
         for (const it of p.items) all.push({ ...it, plan: p.id, label: p.label, folder: p.folder });
@@ -75,7 +78,7 @@
       img.decoding = "async";
       img.alt = m.name;
       img.onload = () => img.classList.add("loaded");
-      img.onerror = () => { if (img.src.indexOf(url(m.src)) < 0) img.src = url(m.src); };
+      img.onerror = () => { img.onerror = null; img.src = full(m); };
       img.src = url(m.thumb);
       const thumb = el("div", "thumb");
       thumb.appendChild(img);
@@ -142,9 +145,9 @@
     const m = view[current];
     lb.style.setProperty("--pc", color(m.plan));
     lbImg.src = url(m.thumb);          // show the light thumb instantly…
-    const full = new Image();          // …then swap in the original when ready
-    full.onload = () => { if (view[current] === m) lbImg.src = full.src; };
-    full.src = url(m.src);
+    const pre = new Image();           // …then swap in the original when ready
+    pre.onload = () => { if (view[current] === m) lbImg.src = pre.src; };
+    pre.src = full(m);
     lbImg.alt = m.name;
     const sub = m.path.includes("/") ? m.path.slice(0, m.path.lastIndexOf("/") + 1) : "";
     $("#lb-name").textContent = m.name;
@@ -153,7 +156,7 @@
     $("#lb-folder").textContent = `${m.folder}/${sub}`;
     $("#lb-size").textContent = m.w ? `${m.w} × ${m.h} px` : "—";
     $("#lb-pos").textContent = `${pad(current + 1, String(view.length).length)} / ${view.length}`;
-    $("#lb-open").href = url(m.src);
+    $("#lb-open").href = full(m);
     if (!lb.open) lb.showModal();
     // preload neighbours' thumbs for snappy navigation
     [current + 1, current - 1].forEach((j) => {
